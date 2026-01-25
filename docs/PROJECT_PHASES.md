@@ -16,7 +16,7 @@ FocusOS is developed as an **evaluation-first agent system**, not a UI-first pro
 | 1 | System & Agent Design | COMPLETE |
 | 2 | Core Agent Implementation | COMPLETE |
 | 3 | Evaluation & Observability Integration | COMPLETE |
-| 4 | MVP Surface (UI + State Integration) | NOT STARTED |
+| 4 | MVP Surface (UI + State Integration) | COMPLETE |
 | 5 | Experimentation | NOT STARTED |
 | 6 | Adaptation & Optimization | NOT STARTED |
 | 7 | Validation & Refinement | NOT STARTED |
@@ -188,7 +188,7 @@ Evaluation is treated as a first-class system component.
 
 ---
 
-## Phase 4: MVP Surface (UI + State Integration) [NOT STARTED]
+## Phase 4: MVP Surface (UI + State Integration) [COMPLETE]
 
 ### Objective
 Expose the agent through a minimal user-facing interface.
@@ -197,16 +197,20 @@ Expose the agent through a minimal user-facing interface.
 UI is built only after the agent and evaluation loop are stable, ensuring
 the frontend consumes a validated system rather than shaping it.
 
-### Planned Activities
-- Build goal input and focus plan UI using Next.js + TypeScript + Bun
-- Integrate Convex for user state, goals, and feedback storage
-- Connect UI → agent → evaluation pipeline end-to-end
-- Implement start/complete/skip interactions
+### Activities Completed
+- Built Next.js (App Router) + Tailwind CSS frontend (`web/`)
+- Implemented Convex schema and backend logic (`web/convex/`)
+  - `createGoal`, `savePlan`, `updateBlockStatus`, `getLatestGoal`
+- Integrated Agent API in frontend (`web/lib/agent.ts`)
+- Created main UI flow (`web/app/page.tsx`):
+  - Goal input form -> Loading -> Plan display
+  - Interactive checkboxes for task completion
+  - Evaluation score visualization
 
-### Expected Outputs
-- Functional end-to-end MVP
-- Persisted feedback and experiment data
-- Real user interaction signals
+### Outputs
+- Functional end-to-end MVP accessible at `http://localhost:3000`
+- Persisted goals, plans, and feedback in Convex database
+- Real-time updates and optimistic UI for task completion
 
 ---
 
@@ -322,5 +326,5 @@ Each phase builds on measurable agent behavior, ensuring continuous,
 data-driven improvement rather than static functionality.
 
 ### Current Status
-- **Phases 0-3 Complete**: Agent service + LLM-as-judge evaluation + Opik observability
-- **Next Up**: Phase 4 (MVP Surface) to build the Next.js frontend
+- **Phases 0-4 Complete**: Full MVP is live (Agent + Evaluation + Web UI + DB)
+- **Next Up**: Phase 5 (Experimentation) to run controlled tests on strategies

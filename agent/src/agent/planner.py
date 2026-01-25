@@ -101,6 +101,8 @@ def _generate_plan_impl(goal_input: GoalInput) -> FocusPlan:
     )
 
     # Parse response
+    if not response.text:
+        raise ValueError("Gemini returned empty response")
     response_text = response.text
     blocks = _parse_plan_response(response_text, strategy)
 

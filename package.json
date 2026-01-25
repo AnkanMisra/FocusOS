@@ -1,0 +1,14 @@
+{
+  "name": "focusos",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n \"AGENT,WEB,CONVEX\" -c \"blue,green,yellow\" \"bun:dev:agent\" \"bun:dev:web\" \"bun:dev:convex\"",
+    "dev:agent": "cd agent && bash -c \"source .venv/bin/activate && uvicorn agent.main:app --reload\"",
+    "dev:web": "cd web && bun dev",
+    "dev:convex": "cd web && npx convex dev",
+    "setup": "bun install && cd web && bun install && cd ../agent && uv venv && bash -c \"source .venv/bin/activate && uv pip install -e '.[dev]'\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
