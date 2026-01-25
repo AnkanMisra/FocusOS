@@ -58,3 +58,32 @@ class FeedbackResponse(BaseModel):
 
     received: bool = Field(default=True)
     message: str = Field(default="Feedback recorded")
+
+
+class EvaluationScoreResponse(BaseModel):
+    """Single evaluation dimension score."""
+
+    score: int = Field(..., description="Score from 0-10", ge=0, le=10)
+    reasoning: str = Field(..., description="Explanation for the score")
+
+
+class PlanEvaluationResponse(BaseModel):
+    """Complete evaluation of a focus plan."""
+
+    task_clarity: EvaluationScoreResponse
+    workload_realism: EvaluationScoreResponse
+    goal_alignment: EvaluationScoreResponse
+    motivation_quality: EvaluationScoreResponse
+    overall_score: float = Field(..., description="Average of all dimensions")
+
+
+class PlanWithEvaluation(BaseModel):
+    """Focus plan with optional evaluation scores."""
+
+    strategy_id: str = Field(..., description="Strategy used for generation")
+    prompt_version: str = Field(..., description="Prompt template version")
+    blocks: list[FocusBlock] = Field(..., description="Ordered list of focus blocks")
+    total_minutes: int = Field(..., description="Total planned time in minutes")
+    evaluation: PlanEvaluationResponse | None = Field(
+        default=None, description="LLM-as-judge evaluation scores"
+    )

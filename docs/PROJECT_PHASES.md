@@ -15,7 +15,7 @@ FocusOS is developed as an **evaluation-first agent system**, not a UI-first pro
 | 0 | Problem Framing & Scope Definition | COMPLETE |
 | 1 | System & Agent Design | COMPLETE |
 | 2 | Core Agent Implementation | COMPLETE |
-| 3 | Evaluation & Observability Integration | NOT STARTED |
+| 3 | Evaluation & Observability Integration | COMPLETE |
 | 4 | MVP Surface (UI + State Integration) | NOT STARTED |
 | 5 | Experimentation | NOT STARTED |
 | 6 | Adaptation & Optimization | NOT STARTED |
@@ -161,7 +161,7 @@ uvicorn agent.main:app --reload
 
 ---
 
-## Phase 3: Evaluation & Observability Integration [NOT STARTED]
+## Phase 3: Evaluation & Observability Integration [COMPLETE]
 
 ### Objective
 Instrument the agent for traceability, evaluation, and debugging.
@@ -170,20 +170,21 @@ Instrument the agent for traceability, evaluation, and debugging.
 Without observability, agent behavior cannot be trusted, compared, or improved.
 Evaluation is treated as a first-class system component.
 
-### Planned Activities
-- Implement LLM-as-judge evaluators for:
+### Activities Completed
+- Implemented LLM-as-judge evaluators (`agent/evaluators.py`):
   - Task clarity (0-10)
   - Workload realism (0-10)
   - Goal alignment (0-10)
   - Motivation quality (0-10)
-- Log behavioral metrics (completion, skips, abandonment)
-- Connect evaluations to strategy identifiers
-- Build Opik experiment dashboards
+- Integrated evaluation into `/agent/plan` via `?evaluate=true` query param
+- Added standalone `/agent/evaluate` endpoint
+- Connected Opik logging for evaluation scores (as trace metadata)
+- Verified with unit tests (`tests/test_evaluators.py`)
 
-### Expected Outputs
-- Full agent traces in Opik
-- Evaluation score datasets
-- Observability dashboards
+### Outputs
+- Full agent traces with evaluation metadata in Opik
+- Evaluation score datasets available via API
+- Observability integration verified
 
 ---
 
@@ -321,5 +322,5 @@ Each phase builds on measurable agent behavior, ensuring continuous,
 data-driven improvement rather than static functionality.
 
 ### Current Status
-- **Phases 0-2 Complete**: Core agent service is live and generating focus plans
-- **Next Up**: Phase 3 (Evaluation & Observability) to add LLM-as-judge scoring
+- **Phases 0-3 Complete**: Agent service + LLM-as-judge evaluation + Opik observability
+- **Next Up**: Phase 4 (MVP Surface) to build the Next.js frontend

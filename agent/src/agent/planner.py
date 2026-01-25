@@ -131,11 +131,15 @@ def generate_plan(goal_input: GoalInput) -> FocusPlan:
         @opik.track(name="generate_focus_plan")
         def tracked_generate(gi: GoalInput) -> FocusPlan:
             strategy = get_strategy(gi.strategy_id)
-            opik.set_trace_attribute("strategy_id", strategy.id)
-            opik.set_trace_attribute("prompt_version", PROMPT_VERSION)
-            opik.set_trace_attribute("goal_text", gi.goal_text)
-            opik.set_trace_attribute("available_minutes", gi.available_minutes)
-            opik.set_trace_attribute("energy_level", gi.energy_level.value)
+            # Add tags and metadata to the trace
+            opik.opik_context.update_current_trace(
+                tags=[strategy.id, PROMPT_VERSION],
+                metadata={
+                    "strategy_id": strategy.id,
+                    "prompt_version": PROMPT_VERSION,
+                    "energy_level": gi.energy_level.value,
+                },
+            )
             return _generate_plan_impl(gi)
 
         return tracked_generate(goal_input)
