@@ -44,3 +44,8 @@ node_modules/
 .next/
 out/
 .turbo/
+
+# Rust
+target/
+Cargo.lock
+experiments/results/

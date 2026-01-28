@@ -82,19 +82,13 @@ def _generate_plan_impl(goal_input: GoalInput) -> FocusPlan:
         block_length=strategy.block_length_min,
     )
 
-    # Call Gemini
+    # Call Gemini with system instruction for better persona adherence
     client = _get_gemini_client()
     response = client.models.generate_content(
         model="gemini-3-flash-preview",
-        contents=[
-            types.Content(role="user", parts=[types.Part(text=system_prompt)]),
-            types.Content(
-                role="model",
-                parts=[types.Part(text="I understand. I will generate focus plans as JSON.")],
-            ),
-            types.Content(role="user", parts=[types.Part(text=user_prompt)]),
-        ],
+        contents=[types.Content(role="user", parts=[types.Part(text=user_prompt)])],
         config=types.GenerateContentConfig(
+            system_instruction=system_prompt,
             temperature=0.7,
             max_output_tokens=2048,
         ),

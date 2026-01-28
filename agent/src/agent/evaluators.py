@@ -68,10 +68,10 @@ def _call_evaluator(prompt: str) -> dict:
     """Call Gemini to evaluate and return parsed JSON response."""
     client = _get_gemini_client()
     response = client.models.generate_content(
-        model="gemini-3-flash-preview",
+        model="gemini-3-pro-preview",
         contents=[types.Content(role="user", parts=[types.Part(text=prompt)])],
         config=types.GenerateContentConfig(
-            temperature=0.3,  # Lower temperature for consistent scoring
+            temperature=0.1,  # Very low temperature for consistent scoring
             max_output_tokens=512,
         ),
     )

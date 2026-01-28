@@ -17,7 +17,7 @@ FocusOS is developed as an **evaluation-first agent system**, not a UI-first pro
 | 2 | Core Agent Implementation | COMPLETE |
 | 3 | Evaluation & Observability Integration | COMPLETE |
 | 4 | MVP Surface (UI + State Integration) | COMPLETE |
-| 5 | Experimentation | NOT STARTED |
+| 5 | Experimentation | COMPLETE |
 | 6 | Adaptation & Optimization | NOT STARTED |
 | 7 | Validation & Refinement | NOT STARTED |
 | 8 | Finalization & Submission | NOT STARTED |
@@ -85,10 +85,11 @@ This phase proves the system can generate structured plans deterministically.
 #### Tech Stack
 - **Runtime**: Python 3.11+ with `uv` package manager
 - **Framework**: FastAPI 0.128+
-- **LLM**: Gemini 3 Flash Preview (`gemini-3-flash-preview`)
+- **LLM (Plan Generation)**: Gemini 3 Flash Preview (`gemini-3-flash-preview`)
+- **LLM (Evaluation)**: Gemini 3 Pro Preview (`gemini-3-pro-preview`)
 - **SDK**: `google-genai` (new SDK, replaces deprecated `google-generativeai`)
 - **Observability**: Opik (optional, enabled when `OPIK_API_KEY` is set)
-- **Testing**: pytest with 13 passing tests
+- **Testing**: pytest with 18 passing tests
 
 #### Project Structure
 ```
@@ -214,7 +215,7 @@ the frontend consumes a validated system rather than shaping it.
 
 ---
 
-## Phase 5: Experimentation [NOT STARTED]
+## Phase 5: Experimentation [COMPLETE]
 
 ### Objective
 Systematically compare agent strategies under controlled conditions.
@@ -222,16 +223,61 @@ Systematically compare agent strategies under controlled conditions.
 ### Rationale
 Improvement must be proven through experiments, not anecdotal behavior.
 
-### Planned Activities
-- Define controlled variables (coaching tone, block length, plan density)
-- Fix inputs for fair comparisons
-- Run Opik experiments across strategies
-- Analyze evaluation trends and behavioral deltas
+### Implementation Details
 
-### Expected Outputs
-- Strategy performance comparisons
-- Identified failure modes
-- Evidence of superior strategies
+#### Tech Stack
+- **Experiment Runner**: Rust CLI with parallel HTTP execution
+- **Dependencies**: tokio, reqwest, clap, serde, indicatif, statrs
+
+#### Project Structure
+```
+experiments/
+├── Cargo.toml           # Rust dependencies
+├── src/
+│   ├── main.rs          # CLI entrypoint with clap
+│   ├── client.rs        # HTTP client for Python agent API
+│   ├── datasets.rs      # 12 built-in test goals
+│   ├── runner.rs        # Parallel experiment execution
+│   └── results.rs       # Statistics and JSON output
+└── results/             # JSON output directory
+```
+
+#### CLI Usage
+```bash
+# Build
+cd experiments && cargo build --release
+
+# Run experiment (requires agent on localhost:8000)
+./target/release/run-experiment --name baseline
+
+# Options
+./target/release/run-experiment \
+  --name my_experiment \
+  --strategies empathetic_25_light,strict_25_aggressive \
+  --concurrency 5 \
+  --verbose
+```
+
+#### Dataset (12 Goals)
+- **Time Coverage**: Short (30-60min), Medium (90-120min), Long (180-240min)
+- **Energy Levels**: Low, Medium, High
+- **Work Types**: Technical, Creative, Administrative, Learning
+- **Complexity**: Single-focus and multi-task goals
+
+#### Evaluation Dimensions
+| Dimension | Description |
+|-----------|-------------|
+| Task Clarity | Are tasks specific and actionable? |
+| Workload Realism | Is workload achievable in time? |
+| Goal Alignment | Does plan address stated goal? |
+| Motivation Quality | Are nudges helpful? |
+
+### Outputs
+- Rust CLI tool for running experiments
+- 12-goal built-in test dataset
+- Parallel execution with progress bars
+- JSON results with per-strategy statistics
+- Dimension-by-dimension winner analysis
 
 ---
 
@@ -326,5 +372,5 @@ Each phase builds on measurable agent behavior, ensuring continuous,
 data-driven improvement rather than static functionality.
 
 ### Current Status
-- **Phases 0-4 Complete**: Full MVP is live (Agent + Evaluation + Web UI + DB)
-- **Next Up**: Phase 5 (Experimentation) to run controlled tests on strategies
+- **Phases 0-5 Complete**: Full MVP + Experimentation tooling ready
+- **Next Up**: Phase 6 (Adaptation & Optimization) to improve agent behavior based on experiment results
