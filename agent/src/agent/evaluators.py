@@ -76,6 +76,10 @@ def _call_evaluator(prompt: str) -> dict:
         ),
     )
 
+    # Handle None response
+    if not response.text:
+        return {"score": 5, "reasoning": "Gemini returned empty response"}
+
     # Parse JSON response
     text = response.text.strip()
     if text.startswith("```"):
