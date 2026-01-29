@@ -9,6 +9,19 @@
     "setup": "bun install && cd web && bun install && cd ../agent && uv venv && bash -c \"source .venv/bin/activate && uv pip install -e '.[dev]'\""
   },
   "devDependencies": {
-    "concurrently": "^9.1.0"
+    "@tailwindcss/postcss": "^4.1.18",
+    "concurrently": "^9.1.0",
+    "tailwindcss": "^4.1.18"
+  },
+  "dependencies": {
+    "@radix-ui/react-slot": "^1.2.4",
+    "clsx": "^2.1.1",
+    "convex": "^1.31.6",
+    "framer-motion": "^12.29.2",
+    "lucide-react": "^0.563.0",
+    "next": "^16.1.6",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4",
+    "tailwind-merge": "^3.4.0"
   }
 }
